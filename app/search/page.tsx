@@ -261,7 +261,7 @@ function SearchPageContent() {
 
       <Footer style={{ background: 'var(--card-bg)', borderTop: `1px solid var(--border-color)` }}>
         <div className="max-w-5xl mx-auto px-4 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-          <p>© 2024 每日励志金句. 所有权利保留.</p>
+          <p>© 2026 每日励志金句. 所有权利保留.</p>
           <p>
             数据每日自动更新 |
             <Link href="/about" className="text-blue-600 hover:underline ml-1">

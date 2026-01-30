@@ -68,13 +68,16 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
     <div className="flex flex-col items-center space-y-4 mt-8">
       {/* 分页信息 */}
       {showInfo && (
-        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+        <div
+          className="text-sm hidden sm:block"
+          style={{ color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}
+        >
           显示第 {(page - 1) * limit + 1} - {Math.min(page * limit, total)} 条，共 {total} 条记录
         </div>
       )}
       
       {/* 分页按钮 */}
-      <nav className="flex items-center space-x-1">
+      <nav className="flex items-center flex-wrap gap-1">
         {/* 上一页 */}
         <button
           onClick={() => handlePageClick(page - 1)}
@@ -147,7 +150,7 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
       
       {/* 快速跳转 */}
       {total_pages > 5 && (
-        <div className="flex items-center space-x-2 text-sm">
+        <div className="hidden sm:flex items-center space-x-2 text-sm" style={{ whiteSpace: 'nowrap' }}>
           <span style={{ color: 'var(--text-secondary)' }}>跳转到</span>
           <input
             type="number"

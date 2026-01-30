@@ -183,13 +183,6 @@ export default function AboutPage() {
                   renderItem={(item) => <List.Item>{item}</List.Item>}
                 />
               </Col>
-              <Col xs={24} md={12}>
-                <Space orientation="vertical" size={8}>
-                  <Link href="/" className="text-blue-600 hover:text-blue-800">← 返回首页</Link>
-                  <Link href="/history" className="text-blue-600 hover:text-blue-800">浏览历史金句</Link>
-                  <Link href="/search" className="text-blue-600 hover:text-blue-800">搜索励志内容</Link>
-                </Space>
-              </Col>
             </Row>
           </Card>
         </div>
@@ -197,7 +190,7 @@ export default function AboutPage() {
 
       <Footer style={{ background: 'var(--card-bg)', borderTop: `1px solid var(--border-color)` }}>
         <div className="max-w-5xl mx-auto px-4 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
-          <p>© 2024 每日励志金句. 所有权利保留.</p>
+          <p>© 2026 每日励志金句. 所有权利保留.</p>
           <p>
             数据每日自动更新 |
             <Link href="/about" className="text-blue-600 hover:underline ml-1">

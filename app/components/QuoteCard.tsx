@@ -64,7 +64,7 @@ export default function QuoteCard({ quote, variant = 'default', showLink = true 
       styles={{ body: { padding: 18 } }}
     >
       <Typography.Paragraph style={{ fontSize: 18, lineHeight: 1.7, marginBottom: 12, color: 'var(--text-primary)' }}>
-        “{quote.content}”
+        {quote.content}
       </Typography.Paragraph>
 
       <Space wrap size={[8, 12]} style={{ width: '100%', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
