@@ -157,13 +157,13 @@ export default function HistoryPage() {
                 </div>
               )}
 
-              <Row gutter={[16, 16]}>
+              <div className="masonry">
                 {data.quotes.map((quote) => (
-                  <Col key={quote.id} xs={24} md={12}>
+                  <div key={quote.id} className="masonry-item">
                     <QuoteCard quote={quote} variant="history" />
-                  </Col>
+                  </div>
                 ))}
-              </Row>
+              </div>
 
               <div className="mt-6 flex justify-center">
                 <AntPagination
@@ -198,8 +198,8 @@ export default function HistoryPage() {
         </div>
       </Content>
 
-      <Footer style={{ background: '#ffffff', borderTop: '1px solid #f0f0f0' }}>
-        <div className="max-w-5xl mx-auto px-4 text-center text-sm text-gray-600">
+      <Footer style={{ background: 'var(--card-bg)', borderTop: `1px solid var(--border-color)` }}>
+        <div className="max-w-5xl mx-auto px-4 text-center text-sm" style={{ color: 'var(--text-secondary)' }}>
           <p>© 2024 每日励志金句. 所有权利保留.</p>
           <p>
             数据每日自动更新 |

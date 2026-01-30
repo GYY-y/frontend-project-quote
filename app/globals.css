@@ -86,3 +86,26 @@ body {
 a {
   color: inherit;
 }
+
+/* Masonry 布局 */
+.masonry {
+  column-gap: 16px;
+  column-count: 1;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry {
+    column-count: 3;
+  }
+}

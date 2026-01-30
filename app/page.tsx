@@ -176,13 +176,13 @@ export default function HomePage() {
                   </Button>
                 </Link>
               </div>
-              <Row gutter={[16, 16]}>
+              <div className="masonry">
                 {recentQuotes.quotes.map((quote) => (
-                  <Col key={quote.id} xs={24} sm={24} md={12}>
+                  <div key={quote.id} className="masonry-item">
                     <QuoteCard quote={quote} variant="history" />
-                  </Col>
+                  </div>
                 ))}
-              </Row>
+              </div>
             </div>
           )}
 
