@@ -2,6 +2,8 @@
 
 import { Quote } from '@/app/lib/api';
 import Link from 'next/link';
+import { Card, Typography, Space, Tag } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
 
 interface QuoteCardProps {
   quote: Quote;
@@ -11,100 +13,84 @@ interface QuoteCardProps {
 
 export default function QuoteCard({ quote, variant = 'default', showLink = true }: QuoteCardProps) {
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('zh-CN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    // 使用固定格式，避免 SSR/CSR 时区差异导致水合不一致
+    if (!dateString) return '';
+    // 处理类似 "2026-01-30 05:43:42" 形式
+    const parts = dateString.split(' ')[0]?.split('-') ?? [];
+    if (parts.length === 3) {
+      return `${parts[0]}年${parseInt(parts[1], 10)}月${parseInt(parts[2], 10)}日`;
+    }
+    return dateString;
   };
 
-  const getCardClassName = () => {
-    const baseClasses = "quote-card bg-white rounded-lg shadow-md p-6 mb-4 transition-all duration-300";
-    
-    switch (variant) {
-      case 'today':
-        return `${baseClasses} bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 hover:shadow-lg`;
-      case 'history':
-        return `${baseClasses} hover:bg-gray-50 hover:shadow-lg cursor-pointer`;
-      case 'search':
-        return `${baseClasses} hover:bg-yellow-50 hover:shadow-lg cursor-pointer border-l-2 border-yellow-400`;
-      default:
-        return `${baseClasses} hover:shadow-lg`;
+  const getCardStyle = () => {
+    const base = {
+      background: 'var(--card-bg)',
+      border: `1px solid var(--border-color)`,
+      color: 'var(--text-primary)',
+    };
+
+    if (variant === 'today') {
+      return {
+        ...base,
+        background: 'linear-gradient(120deg, var(--card-highlight-start) 0%, var(--card-highlight-end) 100%)',
+        border: `1px solid var(--card-highlight-border)`,
+        boxShadow: '0 8px 28px rgba(0,0,0,0.12)',
+      };
     }
+    if (variant === 'search') {
+      return {
+        ...base,
+        background: 'var(--search-highlight-bg)',
+        border: `1px solid var(--search-highlight-border)`,
+      };
+    }
+    return base;
   };
 
   const getSourceColor = (source: string) => {
     const colors: Record<string, string> = {
-      '人民网': 'bg-red-100 text-red-800',
-      '央视网': 'bg-blue-100 text-blue-800',
-      '人民日报': 'bg-green-100 text-green-800',
+      '人民网': 'red',
+      '央视网': 'blue',
+      '人民日报': 'green',
     };
-    return colors[source] || 'bg-gray-100 text-gray-800';
+    return colors[source] || 'default';
   };
 
   return (
-    <div className={getCardClassName()}>
-      {/* 金句内容 */}
-      <blockquote className="text-lg md:text-xl text-gray-800 mb-4 leading-relaxed">
-        "{quote.content}"
-      </blockquote>
-      
-      {/* 元信息 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-600">
-        <div className="flex items-center space-x-3 mb-2 sm:mb-0">
-          {/* 来源标签 */}
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getSourceColor(quote.source)}`}>
-            {quote.source}
-          </span>
-          
-          {/* 作者 */}
-          {quote.author && (
-            <span className="text-gray-600">
-              作者：{quote.author}
-            </span>
-          )}
-          
-          {/* 分类 */}
-          {quote.category && (
-            <span className="text-gray-500">
-              分类：{quote.category}
-            </span>
-          )}
-        </div>
-        
-        {/* 日期 */}
-        <div className="text-gray-500">
-          {formatDate(quote.created_at)}
-        </div>
-      </div>
-      
-      {/* 原文链接 */}
+    <Card
+      className="shadow-sm hover:shadow-md transition-shadow"
+      style={{ marginBottom: 16, ...getCardStyle() }}
+      styles={{ body: { padding: 18 } }}
+    >
+      <Typography.Paragraph style={{ fontSize: 18, lineHeight: 1.7, marginBottom: 12, color: 'var(--text-primary)' }}>
+        “{quote.content}”
+      </Typography.Paragraph>
+
+      <Space wrap size={[8, 12]} style={{ width: '100%', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
+        <Space size={8} wrap>
+          <Tag color={getSourceColor(quote.source)}>{quote.source}</Tag>
+          {quote.author && <Typography.Text type="secondary" style={{ color: 'var(--text-secondary)' }}>作者：{quote.author}</Typography.Text>}
+          {quote.category && <Typography.Text type="secondary" style={{ color: 'var(--text-secondary)' }}>分类：{quote.category}</Typography.Text>}
+        </Space>
+        <Typography.Text type="secondary" style={{ color: 'var(--text-secondary)' }}>{formatDate(quote.created_at)}</Typography.Text>
+      </Space>
+
       {showLink && quote.original_url && (
-        <div className="mt-3 pt-3 border-t border-gray-100">
+        <div style={{ marginTop: 10 }}>
           <Link
             href={quote.original_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="text-blue-600 hover:text-blue-800"
           >
-            查看原文
-            <svg
-              className="ml-1 w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
+            <Space size={6}>
+              <span>查看原文</span>
+              <ArrowRightOutlined />
+            </Space>
           </Link>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

@@ -68,7 +68,7 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
     <div className="flex flex-col items-center space-y-4 mt-8">
       {/* 分页信息 */}
       {showInfo && (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
           显示第 {(page - 1) * limit + 1} - {Math.min(page * limit, total)} 条，共 {total} 条记录
         </div>
       )}
@@ -79,7 +79,12 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
         <button
           onClick={() => handlePageClick(page - 1)}
           disabled={page === 1}
-          className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-3 py-2 text-sm font-medium rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          style={{
+            color: 'var(--text-secondary)',
+            background: 'var(--card-bg)',
+            border: `1px solid var(--border-color)`,
+          }}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -102,11 +107,20 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
             <button
               key={pageNum}
               onClick={() => handlePageClick(pageNum)}
-              className={`px-3 py-2 text-sm font-medium transition-colors ${
+              className="px-3 py-2 text-sm font-medium transition-colors border"
+              style={
                 pageNum === page
-                  ? 'z-10 bg-blue-600 text-white border-blue-600'
-                  : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-50'
-              } border`}
+                  ? {
+                      background: '#1677ff',
+                      color: '#fff',
+                      borderColor: '#1677ff',
+                    }
+                  : {
+                      color: 'var(--text-secondary)',
+                      background: 'var(--card-bg)',
+                      borderColor: 'var(--border-color)',
+                    }
+              }
             >
               {pageNum}
             </button>
@@ -117,7 +131,12 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
         <button
           onClick={() => handlePageClick(page + 1)}
           disabled={page === total_pages}
-          className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-3 py-2 text-sm font-medium rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          style={{
+            color: 'var(--text-secondary)',
+            background: 'var(--card-bg)',
+            border: `1px solid var(--border-color)`,
+          }}
         >
           下一页
           <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,12 +148,17 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
       {/* 快速跳转 */}
       {total_pages > 5 && (
         <div className="flex items-center space-x-2 text-sm">
-          <span className="text-gray-600">跳转到</span>
+          <span style={{ color: 'var(--text-secondary)' }}>跳转到</span>
           <input
             type="number"
             min={1}
             max={total_pages}
-            className="w-16 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-16 px-2 py-1 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+            style={{
+              background: 'var(--card-bg)',
+              color: 'var(--text-primary)',
+              border: `1px solid var(--border-color)`,
+            }}
             onKeyPress={(e) => {
               if (e.key === 'Enter') {
                 const targetPage = parseInt((e.target as HTMLInputElement).value);
@@ -144,7 +168,7 @@ export default function Pagination({ pagination, onPageChange, showInfo = true }
               }
             }}
           />
-          <span className="text-gray-600">页</span>
+          <span style={{ color: 'var(--text-secondary)' }}>页</span>
         </div>
       )}
     </div>

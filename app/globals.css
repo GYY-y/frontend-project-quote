@@ -1,8 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f7f9fb;
   --foreground: #171717;
+  --card-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --header-bg: #ffffff;
+  --nav-active-bg: rgba(255, 255, 255, 0.28);
+  --nav-active-border: rgba(255, 255, 255, 0.45);
+  --accent: #1677ff;
+  --card-highlight-start: rgba(22, 119, 255, 0.08);
+  --card-highlight-end: rgba(22, 119, 255, 0.02);
+  --card-highlight-border: rgba(22, 119, 255, 0.22);
+  --search-highlight-bg: rgba(250, 204, 21, 0.12);
+  --search-highlight-border: rgba(250, 204, 21, 0.25);
 }
 
 @theme inline {
@@ -14,13 +27,62 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b1220;
+    --foreground: #e5e7eb;
+    --card-bg: #0f172a;
+    --border-color: #1f2937;
+    --text-primary: #e5e7eb;
+    --text-secondary: #9ca3af;
+    --header-bg: rgba(15, 23, 42, 0.9);
+    --nav-active-bg: rgba(255, 255, 255, 0.08);
+    --nav-active-border: rgba(255, 255, 255, 0.25);
   }
+}
+
+[data-theme="dark"] {
+  --background: #0b1220;
+  --foreground: #e5e7eb;
+  --card-bg: #0f172a;
+  --border-color: #1f2937;
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --header-bg: rgba(15, 23, 42, 0.9);
+  --nav-active-bg: rgba(255, 255, 255, 0.08);
+  --nav-active-border: rgba(255, 255, 255, 0.25);
+  --accent: #3b82f6;
+  --card-highlight-start: rgba(59, 130, 246, 0.18);
+  --card-highlight-end: rgba(59, 130, 246, 0.08);
+  --card-highlight-border: rgba(59, 130, 246, 0.35);
+  --search-highlight-bg: rgba(250, 204, 21, 0.14);
+  --search-highlight-border: rgba(250, 204, 21, 0.28);
+}
+
+[data-theme="light"] {
+  --background: #f7f9fb;
+  --foreground: #171717;
+  --card-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --header-bg: #ffffff;
+  --nav-active-bg: rgba(255, 255, 255, 0.28);
+  --nav-active-border: rgba(255, 255, 255, 0.45);
+  --accent: #1677ff;
+  --card-highlight-start: rgba(22, 119, 255, 0.08);
+  --card-highlight-end: rgba(22, 119, 255, 0.02);
+  --card-highlight-border: rgba(22, 119, 255, 0.22);
+  --search-highlight-bg: rgba(250, 204, 21, 0.12);
+  --search-highlight-border: rgba(250, 204, 21, 0.25);
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+a {
+  color: inherit;
 }
