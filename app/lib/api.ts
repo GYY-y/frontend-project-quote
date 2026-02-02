@@ -4,6 +4,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 export interface Quote {
   id: number;
   content: string;
+  content_en?: string;
   source: string;
   original_url?: string;
   author?: string;
@@ -79,6 +80,11 @@ export const api = {
   // 搜索金句
   async searchQuotes(query: string, page = 1, limit = 10): Promise<QuotesListResponse> {
     return apiRequest<QuotesListResponse>(`/api/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
+  },
+
+  // 按分类获取金句
+  async getQuotesByCategory(category: string, page = 1, limit = 10): Promise<QuotesListResponse> {
+    return apiRequest<QuotesListResponse>(`/api/category?category=${encodeURIComponent(category)}&page=${page}&limit=${limit}`);
   },
 
   // 获取统计信息

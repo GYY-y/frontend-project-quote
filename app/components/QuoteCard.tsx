@@ -66,6 +66,11 @@ export default function QuoteCard({ quote, variant = 'default', showLink = true 
       <Typography.Paragraph style={{ fontSize: 18, lineHeight: 1.7, marginBottom: 12, color: 'var(--text-primary)' }}>
         {quote.content}
       </Typography.Paragraph>
+      {quote.content_en && (
+        <Typography.Paragraph style={{ fontSize: 14, lineHeight: 1.5, marginBottom: 8, color: 'var(--text-secondary)' }}>
+          {quote.content_en}
+        </Typography.Paragraph>
+      )}
 
       <Space wrap size={[8, 12]} style={{ width: '100%', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
         <Space size={8} wrap>

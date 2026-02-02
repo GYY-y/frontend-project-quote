@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Layout, Typography, Space, Button, Tag, Row, Col, Alert, Skeleton } from 'antd';
+import { Layout, Typography, Space, Button, Tag, Row, Col, Alert, Skeleton, Tabs } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import QuoteCard from '@/app/components/QuoteCard';
 import SearchBox from '@/app/components/SearchBox';
-import { TodayQuote, QuotesListResponse } from '@/app/lib/api';
+import { TodayQuote, QuotesListResponse, api } from '@/app/lib/api';
 import ThemeSwitch from '@/app/components/ThemeSwitch';
 
 const { Header, Content } = Layout;
@@ -34,6 +34,17 @@ export default function HomePage() {
   const [todayQuote, setTodayQuote] = useState<TodayQuote | null>(null);
   const [recentQuotes, setRecentQuotes] = useState<QuotesListResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const [categoryData, setCategoryData] = useState<Record<string, QuotesListResponse | null>>({});
+  const [categoryLoading, setCategoryLoading] = useState(false);
+  const categoryTabs = [
+    { key: '思想类', label: '思想类' },
+    { key: '生活类', label: '生活类' },
+    { key: '经典文化', label: '经典文化' },
+    { key: '海外主流', label: '海外主流' },
+    { key: '语录精选', label: '语录精选' },
+  ];
+  const defaultCategory = '思想类';
+  const [activeCategory, setActiveCategory] = useState(defaultCategory);
   const [error, setError] = useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -74,9 +85,55 @@ export default function HomePage() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    // 预加载默认分类
+    loadCategoryQuotes(defaultCategory);
+  }, []);
+
   const handleSearch = async (query: string) => {
     router.push(`/search?q=${encodeURIComponent(query)}`);
   };
+
+  const loadCategoryQuotes = async (category: string) => {
+    if (categoryLoading) return;
+    // 命中缓存
+    if (categoryData[category]) {
+      return;
+    }
+    setCategoryLoading(true);
+    try {
+      const data = await api.getQuotesByCategory(category, 1, 6);
+      setCategoryData((prev) => ({ ...prev, [category]: data }));
+    } catch (e) {
+      console.error('Failed to fetch category quotes', e);
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  const renderEmpty = () => (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '40px 0',
+        gap: 12,
+        color: 'var(--text-secondary)',
+      }}
+    >
+      <svg width="120" height="80" viewBox="0 0 200 140" aria-hidden="true">
+        <g fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" opacity="0.45">
+          <rect x="20" y="40" width="90" height="60" rx="8" />
+          <rect x="90" y="20" width="90" height="60" rx="8" />
+          <path d="M60 70h10M120 50h15" />
+        </g>
+        <circle cx="160" cy="95" r="6" fill="currentColor" opacity="0.6" />
+      </svg>
+      <Typography.Text type="secondary">暂无数据</Typography.Text>
+    </div>
+  );
 
   const navItems = [
     { label: '首页', href: '/' },
@@ -185,6 +242,42 @@ export default function HomePage() {
               </div>
             </div>
           )}
+
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-4">
+              <Typography.Title level={4} style={{ margin: 0 }}>
+                分类精选
+              </Typography.Title>
+            </div>
+            <Tabs
+              activeKey={activeCategory}
+              onChange={(key) => {
+                setActiveCategory(key);
+                loadCategoryQuotes(key);
+              }}
+              items={categoryTabs.map((tab) => ({
+                key: tab.key,
+                label: tab.label,
+                children: (
+                  <div style={{ minHeight: 100 }}>
+                    {categoryLoading && !categoryData[tab.key] ? (
+                      <Skeleton active paragraph={{ rows: 3 }} />
+                    ) : categoryData[tab.key] && categoryData[tab.key]!.quotes.length > 0 ? (
+                      <div className="masonry">
+                        {categoryData[tab.key]!.quotes.map((quote) => (
+                          <div key={quote.id} className="masonry-item">
+                            <QuoteCard quote={quote} variant="history" />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      renderEmpty()
+                    )}
+                  </div>
+                ),
+              }))}
+            />
+          </div>
 
           <div
             className="rounded-lg p-6 shadow-sm"
